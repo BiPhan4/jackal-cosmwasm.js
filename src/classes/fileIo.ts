@@ -46,7 +46,7 @@ import {
   Strays
 } from 'jackal.js-protos'
 import {
-  buildPostFile,
+  buildPostFileForWasm,
   makePermsBlock,
   readFileTreeEntry,
   removeFileTreeEntry
@@ -354,7 +354,7 @@ export default class FileIo implements IFileIo {
           ])
           needingReset.push(...delItem)
         }
-        const msgPost: EncodeObject = await buildPostFile(msgPostFileBundle, pH)
+        const msgPost: EncodeObject = await buildPostFileForWasm(msgPostFileBundle, pH)
         const msgSign: EncodeObject = pH.storageTx.msgSignContract({
           creator,
           cid,

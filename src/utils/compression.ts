@@ -18,6 +18,7 @@ import { hashAndHex, merkleMeBro } from '@/utils/hash'
 import { Files } from 'jackal.js-protos'
 import { IProtoHandler, IWalletHandler } from '@/interfaces/classes'
 import { getFileTreeData } from '@/utils/misc'
+import { toUtf8 } from "@cosmjs/encoding";
 
 const { crypto } = window ? window : globalThis
 const Plzsu = new PLZSU()
@@ -235,5 +236,30 @@ export async function buildPostFile(
     editors: data.editors,
     viewers: data.viewers,
     trackingNumber: data.trackingNumber
+  })
+}
+
+export async function buildPostFileForWasm(
+  data: IMsgPartialPostFileBundle,
+  pH: IProtoHandler
+): Promise<EncodeObject> {
+
+  const postFileMsg = {
+    post_files: {
+      account: data.account,
+      hashparent: data.hashParent,
+      hashchild: data.hashChild,
+      contents: data.contents,
+      viewers: data.viewers,
+      editors: data.editors,
+      trackingnumber: data.trackingNumber
+    }
+  }
+
+  return pH.cosmwasmTx.msgExecuteContract({
+    sender: data.creator,
+    contract: "jkl14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9scsc9nr",
+    msg: toUtf8(JSON.stringify(postFileMsg)),
+    funds: [],
   })
 }
