@@ -19,6 +19,7 @@ export default interface IStorageHandler {
     space: number
   ): Promise<DeliverTxResponse>
   makeStorageInitMsg(): EncodeObject
+  makeStorageInitForWasmMsg(subMessage: string): EncodeObject
   getAllStrays(): Promise<IStray[]>
   getClientFreeSpace(address: string): Promise<number>
   getStorageJklPrice(space: number, duration: number): Promise<number>

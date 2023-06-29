@@ -3,6 +3,7 @@ import {
   IAllQuery,
   IAllTx,
   ITxBank,
+  ITxCosmWasm,
   ITxDistribution,
   ITxFileTree,
   ITxGov,
@@ -129,6 +130,14 @@ export default class ProtoHandler
   }
 
   /** Custom */
+
+  /**
+ * Expose FileTree Tx client instance.
+ * @returns {ITxFileTree}
+ */
+    get cosmwasmTx(): ITxCosmWasm {
+    return this.allTxClients.cosmwasm
+  }
 
   /**
    * Expose FileTree Tx client instance.

@@ -8,6 +8,7 @@ import {
   ITxRns,
   ITxStaking,
   ITxStorage,
+  ITxCosmWasm,
   TMasterBroadcaster
 } from 'jackal.js-protos'
 import { EncodeObject } from '@cosmjs/proto-signing'
@@ -39,4 +40,8 @@ export default interface IProtoHandler extends IQueryHandler {
   distributionTx: ITxDistribution
   govTx: ITxGov
   stakingTx: ITxStaking
+
+  /** CosmWasm */
+  cosmwasmTx: ITxCosmWasm
+
 }

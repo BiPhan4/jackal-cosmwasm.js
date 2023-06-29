@@ -17,6 +17,7 @@ import {
   removeFileTreeEntry,
   saveFileTreeEntry
 } from '@/utils/compression'
+import { toUtf8 } from "@cosmjs/encoding";
 
 export default class StorageHandler implements IStorageHandler {
   private readonly walletRef: IWalletHandler
@@ -95,14 +96,49 @@ export default class StorageHandler implements IStorageHandler {
    * Initialize address' storage system. Replaces WalletHandler.initAccount().
    * @returns {EncodeObject} - Postkey msg ready for broadcast.
    */
+  // take in a submessage?
   makeStorageInitMsg(): EncodeObject {
     if (!this.walletRef.traits)
       throw new Error(signerNotEnabled('StorageHandler', 'makeStorageInitMsg'))
     const pH = this.walletRef.getProtoHandler()
+
     return pH.fileTreeTx.msgPostkey({
       creator: this.walletRef.getJackalAddress(),
       key: this.walletRef.getPubkey()
     })
+    
+  }
+
+    /**
+   * Initialize address' storage system. Replaces WalletHandler.initAccount().
+   * @returns {EncodeObject} - Postkey msg ready for broadcast.
+   */
+  // can be consumed by make initial directories?
+  // if you want to send in post key as the submessage, you need to pass in 
+  // this.walletRef.getPubKey() somehow 
+  // Is it possible to pass it in outside of jackal-cosmwasm.js repo? or need to pass it in here?
+  // Should you have a cosmwasmHandler that will implement IStorageHandler fully? separate file for cleanliness
+  // if it returns encode 
+  // you also have to take custom addresses too mang 
+
+  makeStorageInitForWasmMsg(): EncodeObject {
+    if (!this.walletRef.traits)
+      throw new Error(signerNotEnabled('StorageHandler', 'makeStorageInitMsg'))
+    const pH = this.walletRef.getProtoHandler()
+
+    const postKeyMsg = {
+      post_key: {
+        key: this.walletRef.getPubkey(),
+      }
+    };
+
+    return pH.cosmwasmTx.msgExecuteContract({
+      sender: this.walletRef.getJackalAddress(),
+      contract: "jkl14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9scsc9nr",
+      msg: toUtf8(JSON.stringify(postKeyMsg)),
+      funds: [],
+    })
+    
   }
 
   /**
