@@ -160,27 +160,6 @@ export default class StorageHandler implements IStorageHandler {
       funds: [],
     })
   }
-
-  async broadcastForOutpost(outpostMsg: EncodeObject | null): Promise<void> {
-    if (!this.walletRef.traits) {
-      throw new Error(signerNotEnabled('FileIo', 'broadcastForOutpost'));
-    }
-  
-    const pH = this.walletRef.getProtoHandler();
-    const memo = ``;
-  
-    // Check if outpostMsg is null and handle accordingly
-    if (outpostMsg === null) {
-      console.error('outpostMsg is null');
-      return;
-    }
-  
-    // Since outpostMsg is not null, wrap it in an array
-    await pH.debugBroadcaster([outpostMsg], { memo, step: false })
-      .catch((err) => {
-        console.error('broadcastForOutpost() -', err);
-      });
-  }
   
   /**
    * Find all strays in the storage deals system.
