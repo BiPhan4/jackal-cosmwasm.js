@@ -28,6 +28,4 @@ export default interface IStorageHandler {
   saveSharing(toAddress: string, shared: ISharedTracker): Promise<EncodeObject>
   readSharing(owner: string, rawPath: string): Promise<ISharedTracker>
   stopSharing(rawPath: string): Promise<EncodeObject>
-  sendCosmosMsgCLI(): EncodeObject
-  broadcastForOutpost(outpostMsg: EncodeObject | null): Promise<void>
 }
