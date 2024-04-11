@@ -159,9 +159,23 @@ export default class StorageHandler implements IStorageHandler {
       msg: toUtf8(JSON.stringify(sendCosmosMsgsCli)),
       funds: [],
     })
-    
   }
 
+  async broadcastForOutpost(
+    outpostMsg: EncodeObject | null
+  ): Promise<void> {
+    if (!this.walletRef.traits)
+      throw new Error(signerNotEnabled('FileIo', 'broadcastForOutpsot'))
+    const pH = this.walletRef.getProtoHandler()
+    const memo = ``
+    await pH
+      .debugBroadcaster(outpostMsg, { memo, step: false })
+      .catch((err) => {
+        console.error('broadcastForOutpost() -', err)
+      })
+  }
+
+  
   /**
    * Find all strays in the storage deals system.
    * @returns {Promise<IStray[]>}
