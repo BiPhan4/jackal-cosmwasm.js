@@ -49,4 +49,5 @@ export default interface IFileIo {
   convertFolderType(rawPath: string): Promise<IFolderHandler>
   rawConvertFolderType(rawPath: string): Promise<EncodeObject[]>
   checkFolderIsFileTree(rawPath: string): Promise<IFolderHandler | null>
+  broadcastForOutpost(outpostMsg: EncodeObject | null): Promise<void>;
 }
