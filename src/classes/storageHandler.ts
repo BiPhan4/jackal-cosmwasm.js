@@ -141,6 +141,27 @@ export default class StorageHandler implements IStorageHandler {
     
   }
 
+  // Calling the contract to use 'send_cosmos_msg_cli'
+
+  sendCosmosMsgCLI(): EncodeObject {
+    if (!this.walletRef.traits)
+      throw new Error(signerNotEnabled('StorageHandler', 'makeStorageInitMsg'))
+    const pH = this.walletRef.getProtoHandler()
+
+    // This enum of ExecuteMsg actually takes no args
+    const sendCosmosMsgsCli = {
+      send_cosmos_msgs_cli: {}
+    };
+
+    return pH.cosmwasmTx.msgExecuteContract({
+      sender: this.walletRef.getJackalAddress(),
+      contract: "wasm14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s0phg4d", // deployed outpost on dev net always has same name
+      msg: toUtf8(JSON.stringify(sendCosmosMsgsCli)),
+      funds: [],
+    })
+    
+  }
+
   /**
    * Find all strays in the storage deals system.
    * @returns {Promise<IStray[]>}
